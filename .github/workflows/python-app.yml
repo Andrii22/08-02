@@ -56,6 +56,7 @@ jobs:
           git push origin update-branch-${{ github.run_id }}
 
       - name: Check for validate pulling requset from Github
+        run: |
           git pull origin update-branch-${{ github.run_id }}
         env:
             GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
