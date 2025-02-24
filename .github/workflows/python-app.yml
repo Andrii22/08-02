@@ -47,6 +47,7 @@ jobs:
           run: pkill -f "python app.py" || true
 
       - name: Automatic push on new branch
+        run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b update-branch-${{ github.run_id }}
