@@ -7,11 +7,12 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    types: [opened, synchronize]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -44,3 +45,16 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
           sleep 15  # Ждём 5 секунд, чтобы сервер успел запуститься
           run: pkill -f "python app.py" || true
+
+      - name: Automatic push on new branch
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b update-branch-${{ github.run_id }}
+          git add .
+          git commit -m "Automated update by GitHub Actions"
+          git push origin update-branch-${{ github.run_id }}
+
+      - name: Check for validate pulling requset from Github
+          git pull origin update-branch-${{ github.run_id }}
+        env:
+            GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
