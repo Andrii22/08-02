@@ -40,7 +40,7 @@ jobs:
       - name: Start Flask application and run unit test for validate
         run: |
           python app.py &  # Запускаем Flask-приложение в фоновом режиме
-          ake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
           sleep 15  # Ждём 5 секунд, чтобы сервер успел запуститься
           run: pkill -f "python app.py" || true
